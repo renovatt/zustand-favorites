@@ -1,68 +1,114 @@
-import { create } from 'zustand';
+import { StoreProps } from '@/@types';
+import { create, StateCreator } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
-type ItemProps = {
-    id: number;
-    name: string;
-}
+const myMiddlewares = (f: StateCreator<StoreProps>) => devtools(persist(f, { name: 'favorite-store' }))
 
-type FavoritesItemsProps = {
-    favoriteItemIds: number[];
-}
+// const useFavotireStore = create<StoreProps>()(
+//     myMiddlewares(
+//         (set) => ({
+//             states: {
+//                 favoritedProjetcs: {
+//                     projectsDetails: []
+//                 },
+//             },
+//             actions: {
+//                 addToFavorite: (projectId) => {
+//                     set((state) => {
+//                         const existingProject = state.states.favoritedProjetcs.projectsDetails.find(
+//                             (project) => project.id === projectId
+//                         );
 
-type ActionsProps = {
-    createItem: (item: ItemProps) => void;
-    removeItem: (id: number) => void;
-    addToFavorite: (id: number) => void;
-    removeFromFavorite: (id: number) => void;
-}
+//                         if (existingProject) {
+//                             existingProject.count += 1;
 
-type StoreProps = {
-    states: {
-        items: ItemProps[],
-        favoriteItems: FavoritesItemsProps;
-    },
-    actions: ActionsProps;
-}
+//                             return {
+//                                 states: {
+//                                     favoritedProjetcs: {
+//                                         projectsDetails: [...state.states.favoritedProjetcs.projectsDetails],
+//                                     },
+//                                 },
+//                             };
+//                         } else {
+//                             return {
+//                                 states: {
+//                                     favoritedProjetcs: {
+//                                         projectsDetails: [
+//                                             ...state.states.favoritedProjetcs.projectsDetails,
+//                                             { id: projectId, count: 1 },
+//                                         ],
+//                                     },
+//                                 },
+//                             };
+//                         }
+//                     });
+//                 },
 
-const useItemsStore = create<StoreProps>(
+//                 removeFromFavorite: (projectId) => {
+//                     set(state => ({
+//                         states: {
+//                             ...state.states, favoritedProjetcs: {
+//                                 projectsDetails: state.states.favoritedProjetcs.projectsDetails
+//                                     .filter(project => project.id !== projectId)
+//                             }
+//                         }
+//                     }))
+//                 },
+//             }
+//         }),
+//     )
+// );
+
+const useFavotireStore = create<StoreProps>()(
     (set) => ({
         states: {
-            items: [],
-            favoriteItems: {
-                favoriteItemIds: []
+            favoritedProjetcs: {
+                projectsDetails: []
             },
         },
         actions: {
-            createItem: (item) => {
-                set(state => ({
-                    states: { ...state.states, items: [...state.states.items, item] }
-                }))
-            },
-            removeItem: (id) => {
-                set(state => ({
-                    states: { ...state.states, items: [...state.states.items.filter(item => item.id !== id)] }
-                }))
-            },
-            addToFavorite: (id) => {
-                set(state => ({
-                    states: {
-                        ...state.states, favoriteItems: {
-                            favoriteItemIds: [...state.states.favoriteItems.favoriteItemIds, id]
-                        }
+            addToFavorite: (projectId) => {
+                set((state) => {
+                    const existingProject = state.states.favoritedProjetcs.projectsDetails.find(
+                        (project) => project.id === projectId
+                    );
+
+                    if (existingProject) {
+                        existingProject.count += 1;
+
+                        return {
+                            states: {
+                                favoritedProjetcs: {
+                                    projectsDetails: [...state.states.favoritedProjetcs.projectsDetails],
+                                },
+                            },
+                        };
+                    } else {
+                        return {
+                            states: {
+                                favoritedProjetcs: {
+                                    projectsDetails: [
+                                        ...state.states.favoritedProjetcs.projectsDetails,
+                                        { id: projectId, count: 1 },
+                                    ],
+                                },
+                            },
+                        };
                     }
-                }))
+                });
             },
-            removeFromFavorite: (id) => {
+            removeFromFavorite: (projectId) => {
                 set(state => ({
                     states: {
-                        ...state.states, favoriteItems: {
-                            favoriteItemIds: state.states.favoriteItems.favoriteItemIds.filter(itemId => itemId !== id)
+                        ...state.states, favoritedProjetcs: {
+                            projectsDetails: state.states.favoritedProjetcs.projectsDetails
+                                .filter(project => project.id !== projectId)
                         }
                     }
                 }))
             },
         }
-    })
-)
+    }),
+);
 
-export default useItemsStore;
+export default useFavotireStore;
