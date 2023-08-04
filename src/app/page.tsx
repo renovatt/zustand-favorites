@@ -1,10 +1,10 @@
-import Items from "./Items"
+import ProjectsListCard from "./components/ProjectsListCard"
 
 export default function Home() {
 
   return (
-    <main className="flex flex-col items-center justify-between p-24">
-      <Items />
+    <main className="flex flex-col items-center justify-between p-14">
+      <ProjectsListCard />
     </main>
   )
 }
