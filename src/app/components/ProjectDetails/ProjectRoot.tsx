@@ -29,14 +29,17 @@ export const ProjectRoot = ({ children, ...props }: ProjectRootProps) => {
     return (
         <section
             style={sectionStyle}
-            className='flex items-center justify-center w-screen h-screen bg-backgroundShadow bg-cover bg-center bg-no-repeat overflow-y-auto'
-        >
+            className="fixed inset-0 overflow-y-auto bg-backgroundModalShadow backdrop-blur-md animate-fade bg-cover bg-center bg-no-repeat">
             <section
                 onClick={(e) => handleCloseModal(e)}
-                className='flex items-center justify-center w-full h-full bg-backgroundModalShadow backdrop-blur-sm'
-            >
-                {children}
+                className="flex min-h-full items-center justify-center py-6 bg-backgroundModalShadow backdrop-blur-md">
+                <section
+                    onClick={(e) => handleCloseModal(e)}
+                    className='relative flex items-center justify-between h-[80%] w-[90%] max-w-6xl rounded-lg p-4 flex-col m-auto overflow-y-auto overflow-x-hidden'
+                >
+                    {children}
+                </section>
             </section>
-        </section>
+        </section >
     )
 }
