@@ -1,9 +1,3 @@
-export type ButtonComponentProps = {
-    text: string;
-    href?: string;
-    onClick?: (id: string) => void;
-}
-
 export type ProjectDetails = {
     id: string;
     count: number;
@@ -27,6 +21,11 @@ export type StoreProps = {
 
 export type ReactQueryProviderProps = {
     children: React.ReactNode;
+}
+
+export type LinkButtonProps = {
+    text: string;
+    href: string;
 }
 
 export type ProjectsTypeProps = {
