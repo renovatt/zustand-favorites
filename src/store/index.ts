@@ -1,114 +1,57 @@
-import { StoreProps } from '@/@types';
-import { create, StateCreator } from 'zustand';
+import { UseStoreProps } from '@/@types';
+import { StateCreator, create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-const myMiddlewares = (f: StateCreator<StoreProps>) => devtools(persist(f, { name: 'favorite-store' }))
+const myMiddlewares = (f: StateCreator<UseStoreProps>) =>
+    devtools(persist(f, { name: 'favorite-store' }))
 
-// const useFavotireStore = create<StoreProps>()(
-//     myMiddlewares(
-//         (set) => ({
-//             states: {
-//                 favoritedProjetcs: {
-//                     projectsDetails: []
-//                 },
-//             },
-//             actions: {
-//                 addToFavorite: (projectId) => {
-//                     set((state) => {
-//                         const existingProject = state.states.favoritedProjetcs.projectsDetails.find(
-//                             (project) => project.id === projectId
-//                         );
-
-//                         if (existingProject) {
-//                             existingProject.count += 1;
-
-//                             return {
-//                                 states: {
-//                                     favoritedProjetcs: {
-//                                         projectsDetails: [...state.states.favoritedProjetcs.projectsDetails],
-//                                     },
-//                                 },
-//                             };
-//                         } else {
-//                             return {
-//                                 states: {
-//                                     favoritedProjetcs: {
-//                                         projectsDetails: [
-//                                             ...state.states.favoritedProjetcs.projectsDetails,
-//                                             { id: projectId, count: 1 },
-//                                         ],
-//                                     },
-//                                 },
-//                             };
-//                         }
-//                     });
-//                 },
-
-//                 removeFromFavorite: (projectId) => {
-//                     set(state => ({
-//                         states: {
-//                             ...state.states, favoritedProjetcs: {
-//                                 projectsDetails: state.states.favoritedProjetcs.projectsDetails
-//                                     .filter(project => project.id !== projectId)
-//                             }
-//                         }
-//                     }))
-//                 },
-//             }
-//         }),
-//     )
-// );
-
-const useFavotireStore = create<StoreProps>()(
-    (set) => ({
-        states: {
-            favoritedProjetcs: {
-                projectsDetails: []
+const useFavoriteStore = create<UseStoreProps>()(
+    myMiddlewares(
+        (set) => ({
+            favoritedProjects: {
+                projectsDetails: [],
             },
-        },
-        actions: {
-            addToFavorite: (projectId) => {
+            addToFavorite: (projectId: string) => {
                 set((state) => {
-                    const existingProject = state.states.favoritedProjetcs.projectsDetails.find(
+                    const existingProjectIndex = state.favoritedProjects.projectsDetails.findIndex(
                         (project) => project.id === projectId
                     );
 
-                    if (existingProject) {
-                        existingProject.count += 1;
+                    if (existingProjectIndex !== -1) {
+                        const updatedProjects = [...state.favoritedProjects.projectsDetails];
+                        updatedProjects[existingProjectIndex] = {
+                            ...updatedProjects[existingProjectIndex],
+                            count: updatedProjects[existingProjectIndex].count + 1,
+                        };
 
                         return {
-                            states: {
-                                favoritedProjetcs: {
-                                    projectsDetails: [...state.states.favoritedProjetcs.projectsDetails],
-                                },
+                            favoritedProjects: {
+                                projectsDetails: updatedProjects,
                             },
                         };
                     } else {
                         return {
-                            states: {
-                                favoritedProjetcs: {
-                                    projectsDetails: [
-                                        ...state.states.favoritedProjetcs.projectsDetails,
-                                        { id: projectId, count: 1 },
-                                    ],
-                                },
+                            favoritedProjects: {
+                                projectsDetails: [
+                                    ...state.favoritedProjects.projectsDetails,
+                                    { id: projectId, count: 1 },
+                                ],
                             },
                         };
                     }
                 });
             },
-            removeFromFavorite: (projectId) => {
-                set(state => ({
-                    states: {
-                        ...state.states, favoritedProjetcs: {
-                            projectsDetails: state.states.favoritedProjetcs.projectsDetails
-                                .filter(project => project.id !== projectId)
-                        }
-                    }
-                }))
+            removeFromFavorite: (projectId: string) => {
+                set((state) => ({
+                    favoritedProjects: {
+                        projectsDetails: state.favoritedProjects.projectsDetails.filter(
+                            (project) => project.id !== projectId
+                        ),
+                    },
+                }));
             },
-        }
-    }),
+        })
+    )
 );
 
-export default useFavotireStore;
+export default useFavoriteStore;
