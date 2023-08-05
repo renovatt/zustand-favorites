@@ -94,9 +94,7 @@ export type ProjectsResponse = {
     projects: ProjectsTypeProps[];
 }
 
-export type ProjectResponse = {
-    project: ProjectsTypeProps;
-}
+export type ProjectResponse = ProjectsTypeProps
 
 export type ProfileResponse = {
     profile: ProfileProps[];
