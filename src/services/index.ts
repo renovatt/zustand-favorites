@@ -1,9 +1,12 @@
 import {
+    APIProjectResponse,
     APIProjectsResponse,
     APISkillsResponse,
     APISoftskillsResponse,
     ErrorMessageResponse,
+    ProjectResponse,
     ProjectsResponse,
+    ProjectsTypeProps,
     SkillsResponse,
     SoftskillsResponse
 } from "@/@types";
@@ -27,18 +30,20 @@ export const getProjects = async (): Promise<APIProjectsResponse> => {
     }
 };
 
-export const getProjectsById = async (id: string) => {
+export const getProjectsById = async (id: string): Promise<APIProjectResponse> => {
     try {
         const response = await fetch(`${BASE_URL}/projects/${id}`);
-        const data = await response.json();
+        const data: ProjectResponse = await response.json();
 
         if (response.ok) {
-            return data;
+            return data
         } else {
-            throw new Error(data.status)
+            const error: ErrorMessageResponse = new Error('Falha na solicitação com status: ' + response.status);
+            throw error;
         }
     } catch (error) {
-        return { error: 'Erro interno.' };
+        const errorWithMessage: ErrorMessageResponse = new Error('Erro interno.');
+        throw errorWithMessage;
     }
 }
 
