@@ -1,12 +1,10 @@
+import { ProjectsTypeProps } from "@/@types";
 import { getProjects, getProjectsById } from "@/services"
-import { ProjectsResponse, ProjectsTypeProps } from "@/@types";
 import { ProjectDetails } from "@/app/components/ProjectDetails";
 
 export async function generateStaticParams() {
     const projects = await getProjects();
-    const projectsData = projects as ProjectsResponse;
-
-    return projectsData.projects.map((project: ProjectsTypeProps) => ({
+    return projects.map((project: ProjectsTypeProps) => ({
         slug: project.id.toString()
     }));
 };
