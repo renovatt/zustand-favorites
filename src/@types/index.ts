@@ -7,16 +7,26 @@ export type FavoritesProjectsProps = {
     projectsDetails: ProjectDetails[];
 }
 
+export type State = {
+    favoritedProjects: FavoritesProjectsProps;
+}
+
 export type ActionsProps = {
     addToFavorite: (projectId: string) => void;
     removeFromFavorite: (projectId: string) => void;
 }
 
-export type StoreProps = {
-    states: {
-        favoritedProjetcs: FavoritesProjectsProps;
-    },
-    actions: ActionsProps;
+export type UseStoreProps = State & ActionsProps;
+
+// export type StoreProps = {
+//     states: {
+//         favoritedProjects: FavoritesProjectsProps;
+//     },
+//     actions: ActionsProps;
+// }
+
+export type FavoriteStarProps = {
+    id: string;
 }
 
 export type ReactQueryProviderProps = {
