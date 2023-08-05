@@ -1,7 +1,7 @@
 'use client'
 
+import { Card } from './Card'
 import { useProjectsQuery } from '@/hooks'
-import { CardProject } from './CardProject'
 import { ErrorMessageResponse, ProjectsResponse } from '@/@types'
 
 const ProjectsListCard = () => {
@@ -27,7 +27,17 @@ const ProjectsListCard = () => {
             {isLoading ? <p>Carragando..</p> : projectsData.projects
                 .sort((a, b) => a.order - b.order)
                 .map((project) => (
-                    <CardProject key={project.id} {...project} />
+                    <Card.Root key={project.id} {...project}>
+                        <Card.Actions>
+                            <Card.Favorite {...project} />
+                        </Card.Actions>
+                        <Card.Container>
+                            <Card.Title text={project.project_name} />
+                            <Card.Actions>
+                                <Card.Link text='Ver Detalhes' href={`project/${project.id}`} />
+                            </Card.Actions>
+                        </Card.Container>
+                    </Card.Root>
                 ))}
         </section>
     )
