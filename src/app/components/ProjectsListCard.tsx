@@ -3,6 +3,7 @@
 import { Card } from './Card'
 import { useProjectsQuery } from '@/hooks'
 import { ErrorMessageResponse, ProjectsResponse } from '@/@types'
+import Loading from '../loading'
 
 const ProjectsListCard = () => {
     const {
@@ -24,7 +25,7 @@ const ProjectsListCard = () => {
 
     return (
         <section className='flex justify-around items-center flex-wrap'>
-            {isLoading ? <p>Carragando..</p> : projectsData.projects
+            {isLoading ? <Loading /> : projectsData.projects
                 .sort((a, b) => a.order - b.order)
                 .map((project) => (
                     <Card.Root key={project.id} {...project}>
