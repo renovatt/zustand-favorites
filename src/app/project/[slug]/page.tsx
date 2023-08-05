@@ -1,6 +1,6 @@
-import ProjectInfo from "@/app/components/ProjectInfo";
 import { getProjects, getProjectsById } from "@/services"
 import { ProjectsResponse, ProjectsTypeProps } from "@/@types";
+import { ProjectDetails } from "@/app/components/ProjectDetails";
 
 export async function generateStaticParams() {
     const projects = await getProjects();
@@ -13,5 +13,17 @@ export async function generateStaticParams() {
 
 export default async function Project({ params }: { params: { slug: string } }) {
     const project: ProjectsTypeProps = await getProjectsById(params.slug);
-    return <ProjectInfo {...project} />
+    return (
+        <ProjectDetails.Root {...project} >
+            <ProjectDetails.Content  {...project} >
+                <ProjectDetails.Card  {...project} />
+                <ProjectDetails.Icon />
+                <ProjectDetails.ThumbnailContainer >
+                    <ProjectDetails.Thumbnail {...project} />
+                    <ProjectDetails.Description text={project.description} />
+                    <ProjectDetails.Techs {...project} />
+                </ProjectDetails.ThumbnailContainer>
+            </ProjectDetails.Content>
+        </ProjectDetails.Root>
+    )
 }
